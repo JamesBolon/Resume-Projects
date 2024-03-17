@@ -1,0 +1,78 @@
+""" The function creates a Hashlist using a standard python list of some desired length and values (assumed to be numbers) and stored inside. I use the value 
+divided by list length to obtain the key and use linear probing to handle collisions. """
+
+class HashList():
+    def __init__(self, length):
+        self.length = length
+        self.hashlist = [None] * self.length
+    
+    def hashfunction(self, item):
+        return item % self.length
+    
+    def put(self, item):
+        if self.hashlist[self.hashfunction(item)] == None:
+            self.hashlist[self.hashfunction(item)] = item
+        else:
+            self.current = self.hashfunction(item)
+            while self.current < len(self.hashlist) and self.hashlist[self.current] != None:
+                self.current += 1
+            
+            self.current -= 1
+
+            if self.hashlist[self.current] == None:
+                self.hashlist[self.current] = item
+            else:
+                self.current = 0
+                while self.hashlist[self.current] != None and self.current != self.hashfunction(item):
+                    self.current +=1
+            
+            if self.hashlist[self.current] == None:
+                self.hashlist[self.current] = item
+            else:
+                raise IndexError
+
+    def contains(self, item):
+        if self.hashlist[self.hashfunction(item)] == item:
+            return True
+        else:
+            self.current == self.hashfunction(item) 
+            while self.current < self.length:
+                if self.hashlist[self.current] == item:
+                    return True
+                self.current += 1
+                
+            self.initial = self.current
+            self.current = 0
+            while self.current != self.initial:
+                if self.hashlist[self.current] == item:
+                    return True
+                self.current += 1
+
+            return False
+            
+    def items(self):
+        self.current = 0
+        self.items_list = []
+        while self.current != len(self.hashlist):
+            if self.hashlist[self.current] != None:
+                self.items_list.append(self.hashlist[self.current])
+            self.current += 1
+        return self.items_list
+
+
+#Testing
+    
+#sorted_list = [1,2,3,4,5,6,7]
+#x = search_sorted_list(sorted_list, 'seven')
+#print(x)
+
+test = HashList(4)
+test.put(1)
+test.put(2)
+test.put(3)
+test.put(22)
+print(test.hashfunction(2))
+print('t')    
+print(test.items())
+print('t')
+print(test.contains(99))
