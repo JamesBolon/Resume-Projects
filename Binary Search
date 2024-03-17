@@ -1,0 +1,23 @@
+""" Below is a binary search function that doesn't involve splicing the list as that takes O(k) time and I want to avoid that cost. Instead, I create default variables for the
+bounds of where I am searching to inform the function of the desired index range. """
+
+def search_sorted_list(sorted_list, item, upper = 0, lower = 0, current = 0):
+    if upper == 0 and lower == 0 and current ==0:
+        current = (len(sorted_list)//2)
+        upper = len(sorted_list)
+        lower = 0
+    else:
+        current = (upper + lower)//2
+
+    if sorted_list[current] == item:
+        return True
+    elif (upper == current or lower == current):
+        return False
+    elif abs(upper - lower) == 1:
+        if sorted_list[upper] > item and sorted_list[lower] < item:
+            return False
+    else:
+        if sorted_list[current] > item:
+            return search_sorted_list(sorted_list, item, upper = current, lower = lower, current = current)
+        else:
+            return search_sorted_list(sorted_list, item, upper = upper, lower = current, current = current)
