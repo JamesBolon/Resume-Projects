@@ -1,0 +1,64 @@
+""" I implement four different list-search algorithms below. Insertion-sort, Bubble-sort, Selection-sort, and Merge-sort. I tried to create a Merge-sort function that just bounds
+values so I wouldn't have to continually slice the list, which takes O(k) time. It isn't a huge deal as the function already takes O(nlogn) time, but I wanted to see if I could do
+it. """
+
+def Insertion_Sort(list_of_items):
+    sorted_list = []
+
+    for i in range(len(list_of_items) - 1):
+        if len(sorted_list) == 0:
+            sorted_list.append(list_of_items.pop())
+        else:
+            for j in range(len(sorted_list) - 1):
+                ## working from back to front on list_of_items so pop() is less costly ##
+                if list_of_items[(len(list_of_items) - 1)] < sorted_list[j]:
+                    sorted_list.insert(list_of_items.pop())
+                elif j == len(sorted_list - 1):
+                    sorted_list.append(list_of_items.pop())
+                else:
+                    return IndexError
+                
+    return
+                
+def Bubble_Sort(list_of_items):
+    for i in range(len(list_of_items) - 1):
+        for j in range(len(list_of_items) - 1):
+            ## working from back to front on list_of_items so pop() is less costly ##
+            if j == len(list_of_items):
+                break
+            elif list_of_items[j] > list_of_items[j + 1]:
+                list_of_items[j], list_of_items[j + 1] = list_of_items[j + 1], list_of_items[j]
+
+    return
+
+def Selection_Sort(list_of_items):
+    for i in range(len(list_of_items) - 1):
+        for j in range((len(list_of_items) - 1) - i):
+            curr_max = list_of_items[0]
+            curr_index = 0
+            if list_of_items[j] > curr_max:
+                curr_max = list_of_items[j]
+                curr_index = j
+            
+        list_of_items[(len(list_of_items) - 1) - i], list_of_items[curr_index] = curr_max, list_of_items[(len(list_of_items) - 1) - i]
+
+    return
+
+def Merge_Sort(list_of_items1, list_of_items2):
+    sorted_list = []
+
+    index_right = 0
+    index_left = 0
+
+    while index_left < len(list_of_items1) and index_right < len(list_of_items2):
+        if list_of_items1[index_left] < list_of_items2[index_right]:
+            sorted_list.append(list_of_items1[index_left])
+            index_left += 1
+        else:
+            sorted_list.append(list_of_items2[index_right])
+            index_right += 1
+
+    if index_left < len(list_of_items1):
+        sorted_list.append(list_of_items1[index_left:])
+    elif index_right < len(list_of_items2):
+        sorted_list.append(list_of_items2[index_right:])
