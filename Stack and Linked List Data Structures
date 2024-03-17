@@ -1,0 +1,217 @@
+"""Below are a class for a stack and linked list. These data structures can, of course, be accessed without having to build the actual mechanics, but this gave me
+a much better understanding of how they work and operate. I provided Big Oh Running time analyses for each function."""
+
+class Stack():
+## Running Time - takes O(1) because it is essentially an index assignment ##
+    def __init__(self):
+        self.stack = [ ]
+## Running Time - takes O(2) because it requires an index assignment and an append ##
+    def push(self, item):
+        self.item = item
+        self.stack.append(self.item)
+## Running Time - takes O(1) because it is only a pop or returns None ##
+    def pop(self):
+        try:
+            return self.stack.pop()
+        except:
+            return None
+## Running Time - takes O(1) because it just returns a value from a given index ##
+    def peek(self):
+        return self.stack[len(self.stack) - 1]
+## Running Time - takes O(1) because len() is a single operation ##
+    def isEmpty(self):
+        if len(self.stack) == 0:
+            return True
+        else:
+            return False
+## Running Time - takes O(1) because len() is a single operation ##
+    def size(self):
+        return len(self.stack)
+
+
+## ----------------------------------------------------------------------------------------------------------------------------------------------------- ##
+
+
+# Linked List Code
+class Node():
+## Running Time - takes O(1) for the two assignments ##
+    def __init__(self, item):
+        self.item = item
+        self.next = None
+
+class Linked_List():
+## Running Time - takes O(1) for the single assignment ##
+    def __init__(self):
+        self.head = None
+## Running Time - takes O(1) for the node assignment, two assignments in Node(), and the two assignments after ##
+    def add(self, item):
+        new_node = Node(item)
+        new_node.next = self.head
+        self.head = new_node
+## Running Time - takes at minimum O(5) and at maximum O(3n + 6) = O(3n) ##
+    def remove(self, item):
+        current_node = self.head
+        prev_node = None
+
+        if current_node is not None and current_node.item == item:
+            self.head = current_node.next
+            return
+        
+        while current_node is not None:
+            if current_node.item == item:
+                break
+            prev_node = current_node
+            current_node = current_node.next
+
+        if current_node is None:
+            raise KeyError(f"Item {item} not found in the list.")
+        
+        if prev_node is None:
+            self.head = current_node.next
+        else:
+            prev_node.next = current_node.next
+## Running Time - takes at minimum O(3) and at maximum O(2n + 3) = O(2n) ##
+    def search(self, item):
+        current_node = self.head
+        
+        while current_node is not None:
+            if current_node.item == item:
+                return True
+            current_node = current_node.next
+
+        return False
+## Running Time - takes O(2) ##
+    def isEmpty(self):
+        if self.head is None:
+            return True
+        else:
+            return False
+## Running Time - takes at minimum O(4) and at maximum O(2n + 4) = O(2n) ##
+    def size(self):
+        count = 0
+        current_node = self.head
+
+        while current_node is not None:
+            count += 1
+            current_node = current_node.next
+
+        return count
+## Running Time - takes at minimum O(3) and at maximum O(n + 5) = O(n) ##
+    def append(self, item):
+        new_node = Node(item)
+
+        if self.head is None:
+            self.head = new_node
+            return
+        
+        current_node = self.head
+        while current_node.next is not None:
+            current_node = current_node.next
+
+        current_node.next = new_node
+## Running Time - takes at minimum O(5) and at maximum O(3n + 5) = O(3n) ##
+    def index(self, item):
+        current_node = self.head
+        position = 0
+
+        while current_node is not None:
+            if current_node.item == item:
+                return position
+            current_node = current_node.next
+            position += 1
+
+        if current_node is None:
+            raise KeyError(f"Item {item} not found in the list.")
+## Running Time - takes at minimum O(2) and at maximum O(2n + 9) = O(2n) ##
+    def insert(self, position, item):
+        if position < 0:
+            raise ValueError("Position needs be a positive number.")
+    
+        new_node = Node(item)
+
+        if position == 0:
+            new_node.next = self.head
+            self.head = new_node
+            return
+    
+        current_node = self.head
+        current_position = 0
+
+        while current_node is not None and current_position < position - 1:
+            current_node = current_node.next
+            current_position += 1
+
+        if current_node == None:
+            raise ValueError("List is too short for the specified position.")
+    
+        new_node.next = current_node.next
+        current_node.next = new_node
+## Running Time - takes at minimum O(2) and at maximum O(n + 6) = O(n) ##
+    def pop(self):
+        if self.head is None:
+            raise ValueError("List is empty. Cannot pop from an empty list.")
+    
+        if self.head.next is None:
+            popped_item = self.head.item
+            self.head = None
+            return popped_item
+    
+        current_node = self.head
+
+        while current_node.next.next == None:
+            current_node = current_node.next
+
+        popped_item = current_node.next.item
+        current_node.next = None
+        return popped_item
+## Running Time - takes at minimum O(2) and at maximum O(2n + 10) = O(2n) ##
+    def pop(self, pos):
+        if self.head is None:
+            raise ValueError("List is empty. Cannot pop from an empty list.")
+
+        if pos < 0:
+            raise ValueError("Position should be a positive number.")
+    
+        if pos == 0:
+            popped_item = self.head.item
+            self.head = self.head.next
+            return popped_item
+    
+        current_node = self.head
+        current_position = 0
+
+        while current_node.next is not None and current_position < pos - 1:
+            current_node = current_node.next
+            current_position += 1
+
+        if current_node.next is None:
+            raise ValueError("Position is beyond the end of the list.")
+
+        popped_item = current_node.next.item
+        current_node.next = current_node.next.next
+        return popped_item
+        
+# Testing every function of the Linked List Class
+linked_list = Linked_List() 
+
+linked_list.add(7)
+linked_list.add(5)
+linked_list.add(9)
+linked_list.add(3)
+linked_list.add(11)
+linked_list.add(1)
+linked_list.add(13)
+    
+linked_list.remove(3)
+
+linked_list.append(27)
+
+linked_list.insert(5, 37)
+
+print("Linked List:")
+print(linked_list.search(11))
+print(linked_list.isEmpty())
+print(linked_list.size())
+print(linked_list.index(11))
+print(linked_list.pop(1))
+print(linked_list.pop(3))
